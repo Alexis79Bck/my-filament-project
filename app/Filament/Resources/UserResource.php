@@ -4,6 +4,8 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
+use App\Models\City;
+use App\Models\State;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -11,8 +13,9 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Forms\Components\Section;
-use Illuminate\Database\Eloquent\Builder;
+use Filament\Forms\Get;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+
 
 class UserResource extends Resource
 {
@@ -38,6 +41,7 @@ class UserResource extends Resource
                             ->password()
                             ->required(),
                     ]),
+                    
                 Section::make('Address Info')
                     ->columns(3)
                     ->schema([
@@ -47,11 +51,19 @@ class UserResource extends Resource
                             ->preload()
                             ->live()
                             ->required(),
-                        Forms\Components\TextInput::make('email')
-                            ->email()
+                        Forms\Components\Select::make('state_id')
+                            ->options(fn (Get $get)=> State::query()
+                            ->where('country_id', $get('country_id'))
+                            ->pluck('name','id'))
+                            ->searchable()
+                            ->preload()
                             ->required(),
-                        Forms\Components\TextInput::make('password')
-                            ->password()
+                        Forms\Components\Select::make('city_id')
+                            ->options(fn (Get $get)=> City::query()
+                            ->where('state_id', $get('state_id'))
+                            ->pluck('name','id'))
+                            ->searchable()
+                            ->preload()
                             ->required(),
                     ]),
             ]);
