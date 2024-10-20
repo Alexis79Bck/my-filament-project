@@ -14,6 +14,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Get;
+use Filament\Forms\Set;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 
@@ -50,6 +51,10 @@ class UserResource extends Resource
                             ->searchable()
                             ->preload()
                             ->live()
+                            ->afterStateUpdated(function (Set $set) {
+                                $set('state_id',null);
+                                $set('city_id',null);
+                            })
                             ->required(),
                         Forms\Components\Select::make('state_id')
                             ->options(fn (Get $get)=> State::query()
@@ -57,6 +62,8 @@ class UserResource extends Resource
                             ->pluck('name','id'))
                             ->searchable()
                             ->preload()
+                            ->live()
+                            ->afterStateUpdated(fn (Set $set) => $set('city_id',null))
                             ->required(),
                         Forms\Components\Select::make('city_id')
                             ->options(fn (Get $get)=> City::query()
