@@ -40,6 +40,7 @@ class UserResource extends Resource
                             ->required(),
                         Forms\Components\TextInput::make('password')
                             ->password()
+                            ->hiddenOn('edit')
                             ->required(),
                     ]),
                     
@@ -72,6 +73,12 @@ class UserResource extends Resource
                             ->searchable()
                             ->preload()
                             ->required(),
+                        Forms\Components\TextInput::make('address')
+                            ->required(),
+                        Forms\Components\TextInput::make('phone_number')
+                            ->required(),
+                        Forms\Components\TextInput::make('postal_code')
+                            ->required(),
                     ]),
             ]);
     }
@@ -84,9 +91,21 @@ class UserResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('address') 
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: false),
+                Tables\Columns\TextColumn::make('phone_number') 
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: false),
+                Tables\Columns\TextColumn::make('postal_code') 
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: false),
                 Tables\Columns\TextColumn::make('email_verified_at')
                     ->dateTime()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

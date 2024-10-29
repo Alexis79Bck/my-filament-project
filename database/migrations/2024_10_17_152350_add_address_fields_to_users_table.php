@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('state_id')->nullable()->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('city_id')->nullable()->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->string('address')->nullable();
+            $table->string('phone_number')->nullable();
             $table->string('postal_code')->nullable();
         });
     }
